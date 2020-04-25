@@ -1,4 +1,8 @@
 {
     "project_name": "Base Project",
-    "project_slug": "{{ cookiecutter.project_name|lower|replace(' ', '-') }}"
+    "project_slug": "{{ cookiecutter.project_name|lower|replace(' ', '-') }}",
+
+    "postgres_password": "changethis",
+    "pgadmin_email": "admin@admin.com",
+    "pgadmin_password": "changethis"
 }
