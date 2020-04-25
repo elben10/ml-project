@@ -8,8 +8,9 @@ services:
     pgadmin:
         env_file: .env
         image: dpage/pgadmin4
-        labels:
-            - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.${DOMAIN}`)"
+        deploy:
+            labels:
+                - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.${DOMAIN}`)"
     proxy:
         image: traefik:v2.2
         volumes: 
