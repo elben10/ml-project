@@ -1,5 +1,8 @@
 version: '3.7'
 services: 
+    minio:
+        labels:
+            - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"
     pgadmin:
         labels:
             - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.${DOMAIN}`)"

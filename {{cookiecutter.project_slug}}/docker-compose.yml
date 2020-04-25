@@ -5,6 +5,13 @@ services:
         image: postgres:12
         volumes: 
             - ./postgres/:/docker-entrypoint-initdb.d/:ro
+    minio:
+        command: server /data
+        deploy:
+            labels:
+                - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"
+        env_file: .env
+        image: minio/minio
     pgadmin:
         env_file: .env
         image: dpage/pgadmin4

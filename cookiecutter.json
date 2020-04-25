@@ -4,5 +4,8 @@
 
     "postgres_password": "changethis",
     "pgadmin_email": "admin@admin.com",
-    "pgadmin_password": "changethis"
+    "pgadmin_password": "changethis",
+
+    "minio_access_key": "changethis",
+    "minio_secret_key": "changethis"
 }
