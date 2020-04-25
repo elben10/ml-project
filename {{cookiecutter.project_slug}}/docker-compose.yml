@@ -12,6 +12,19 @@ services:
                 - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"
         env_file: .env
         image: minio/minio
+    mlflow:
+        build:
+            context: mlflow
+            dockerfile: dockerfile
+        command: >
+            mlflow server 
+            --host 0.0.0.0
+        deploy:
+            labels:
+                - "traefik.http.routers.mlflow.rule=Host(`mlflow.${DOMAIN}`)"
+                - "traefik.http.services.mlflow.loadbalancer.server.port=5000"
+        env_file: .env
+        image: mlflow
     pgadmin:
         env_file: .env
         image: dpage/pgadmin4

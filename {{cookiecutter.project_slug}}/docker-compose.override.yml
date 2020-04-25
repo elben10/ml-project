@@ -3,6 +3,10 @@ services:
     minio:
         labels:
             - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"
+    mlflow:
+        labels:
+            - "traefik.http.routers.mlflow.rule=Host(`mlflow.${DOMAIN}`)"
+            - "traefik.http.services.mlflow.loadbalancer.server.port=5000"
     pgadmin:
         labels:
             - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.${DOMAIN}`)"
