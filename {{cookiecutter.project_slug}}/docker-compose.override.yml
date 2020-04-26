@@ -11,15 +11,15 @@ services:
             - "traefik.http.services.airflow.loadbalancer.server.port=8080"
         volumes: 
             - ./airflow/dags/:/root/dags/
-            - ./src/:/{{cookiecutter.project_slug}}/
+            - ./src/:/src/
     airflow_scheduler:
         volumes: 
             - ./airflow/dags/:/root/dags/
-            - ./src/:/{{cookiecutter.project_slug}}/
+            - ./src/:/src/
     airflow_worker:
         volumes: 
             - ./airflow/dags/:/root/dags/
-            - ./src/:/{{cookiecutter.project_slug}}/
+            - ./src/:/src/
     flower:
         labels:
             - "traefik.http.routers.flower.rule=Host(`flower.${DOMAIN}`)"
