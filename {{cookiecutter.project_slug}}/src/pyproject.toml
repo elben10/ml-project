@@ -2,7 +2,7 @@
 name = "src"
 version = "0.1.0"
 description = ""
-authors = ["Admin <{{cookiecutter.first_superuser_email}}>"]
+authors = ["Admin <admin@admin.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
