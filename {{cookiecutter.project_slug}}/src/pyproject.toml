@@ -1,11 +1,13 @@
 [tool.poetry]
-name = "{{cookiecutter.project_slug_python}}"
+name = "src"
 version = "0.1.0"
 description = ""
 authors = ["Admin <{{cookiecutter.first_superuser_email}}>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+sqlalchemy = "^1.3.16"
+psycopg2-binary = "^2.8.5"
 
 [tool.poetry.dev-dependencies]
 
