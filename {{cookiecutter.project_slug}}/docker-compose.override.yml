@@ -1,4 +1,9 @@
 version: '3.7'
+networks:
+    traefik-public:
+        external: false
+    internal:
+        external: false
 services: 
     minio:
         labels:
@@ -13,5 +18,10 @@ services:
     proxy:
         command: 
             - --providers.docker
+        networks:
+            internal:
+                aliases: 
+                    - minio.localhost
+            traefik-public:
         ports:
             - 80:80

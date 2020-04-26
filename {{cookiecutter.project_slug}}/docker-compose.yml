@@ -1,8 +1,15 @@
 version: '3.7'
+networks:
+    traefik-public:
+        external: true
+    internal:
+        external: false
 services: 
     db:
         env_file: .env
         image: postgres:12
+        networks: 
+            - internal
         volumes: 
             - ./postgres/:/docker-entrypoint-initdb.d/:ro
     minio:
@@ -12,26 +19,42 @@ services:
                 - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"
         env_file: .env
         image: minio/minio
+        networks: 
+            - internal
     mlflow:
         build:
             context: mlflow
             dockerfile: dockerfile
-        command: >
-            mlflow server 
-            --host 0.0.0.0
+        command: /scripts/entrypoint.sh
+        depends_on: 
+            - db
         deploy:
             labels:
                 - "traefik.http.routers.mlflow.rule=Host(`mlflow.${DOMAIN}`)"
                 - "traefik.http.services.mlflow.loadbalancer.server.port=5000"
         env_file: .env
+        environment: 
+            - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+            - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
+            - MLFLOW_S3_ENDPOINT_URL=http://minio.${DOMAIN}
         image: mlflow
+        networks: 
+            - internal
+        restart: always
+        volumes: 
+            - ./mlflow/scripts:/scripts/
     pgadmin:
         env_file: .env
         image: dpage/pgadmin4
         deploy:
             labels:
                 - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.${DOMAIN}`)"
+        networks: 
+            - internal
     proxy:
         image: traefik:v2.2
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
+        networks: 
+            - internal
+            - traefik-public
