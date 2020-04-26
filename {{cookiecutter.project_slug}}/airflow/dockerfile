@@ -11,8 +11,10 @@ RUN pip install "apache-airflow[celery,crypto,postgres]" poetry tenacity && \
 
 COPY src/pyproject.toml src/poetry.lock*  /{{cookiecutter.project_slug}}/
 
+# Add source code
 COPY src/ /{{cookiecutter.project_slug}}/
 
-RUN poetry install
+# Add scripts
+COPY ./airflow/scripts/ /scripts
 
-ENV PYTHONPATH=/{{cookiecutter.project_slug}}
+RUN poetry install

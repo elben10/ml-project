@@ -18,9 +18,6 @@ services:
         image: airflow
         networks: 
             - internal
-        volumes: 
-            - ./airflow/scripts/:/scripts
-            - ./airflow/dags/:/root/dags/
     airflow_scheduler:
         build:
             context: .
@@ -31,9 +28,6 @@ services:
         networks: 
             - internal
         restart: always
-        volumes: 
-            - ./airflow/scripts/:/scripts
-            - ./airflow/dags/:/root/dags/
     airflow_worker:
         build:
             context: .
@@ -44,9 +38,6 @@ services:
         networks: 
             - internal
         restart: always
-        volumes: 
-            - ./airflow/scripts/:/scripts
-            - ./airflow/dags/:/root/dags/
     db:
         env_file: .env
         image: postgres:12
