@@ -7,8 +7,8 @@ networks:
 services: 
     airflow:
         build:
-            context: airflow
-            dockerfile: dockerfile
+            context: .
+            dockerfile: ./airflow/dockerfile
         command: /scripts/webserver-entrypoint.sh
         deploy:
             labels:
@@ -23,8 +23,8 @@ services:
             - ./airflow/dags/:/root/dags/
     airflow_scheduler:
         build:
-            context: airflow
-            dockerfile: dockerfile
+            context: .
+            dockerfile: airflow/dockerfile
         command: /scripts/scheduler-entrypoint.sh
         env_file: .env
         image: airflow
@@ -36,8 +36,8 @@ services:
             - ./airflow/dags/:/root/dags/
     airflow_worker:
         build:
-            context: airflow
-            dockerfile: dockerfile
+            context: .
+            dockerfile: ./airflow/dockerfile
         command: /scripts/worker-entrypoint.sh
         env_file: .env
         image: airflow

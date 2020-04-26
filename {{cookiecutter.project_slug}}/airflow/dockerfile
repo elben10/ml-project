@@ -1,7 +1,18 @@
 FROM python:3.7-slim-buster
 
+WORKDIR /{{cookiecutter.project_slug}}/
+
 RUN apt update && \
     apt-get install -y \
     gcc
 
-RUN pip install "apache-airflow[celery,crypto,postgres]" tenacity
+RUN pip install "apache-airflow[celery,crypto,postgres]" poetry tenacity && \
+    poetry config virtualenvs.create false
+
+COPY src/pyproject.toml src/poetry.lock*  /{{cookiecutter.project_slug}}/
+
+COPY src/ /{{cookiecutter.project_slug}}/
+
+RUN poetry install
+
+ENV PYTHONPATH=/{{cookiecutter.project_slug}}
