@@ -18,6 +18,7 @@ services:
         image: airflow
         networks: 
             - internal
+        restart: always
     airflow_scheduler:
         build:
             context: .
@@ -43,6 +44,7 @@ services:
         image: postgres:12
         networks: 
             - internal
+        restart: always
         volumes: 
             - ./postgres/:/docker-entrypoint-initdb.d/:ro
     flower:
@@ -73,6 +75,7 @@ services:
         image: minio/minio
         networks: 
             - internal
+        restart: always
     mlflow:
         build:
             context: mlflow
@@ -103,6 +106,7 @@ services:
                 - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.${DOMAIN}`)"
         networks: 
             - internal
+        restart: always
     proxy:
         image: traefik:v2.2
         volumes: 
@@ -110,8 +114,10 @@ services:
         networks: 
             - internal
             - traefik-public
+        restart: always
     rabbitmq:
         env_file: .env
         image: rabbitmq
         networks: 
             - internal
+        restart: always
