@@ -22,7 +22,7 @@ wait_seconds = 1
 )
 def init() -> None:
     try:
-        # check_minio_is_active()
+        check_minio_is_active()
         check_db_is_active()
         logger.info("Done")
     except Exception as e:
