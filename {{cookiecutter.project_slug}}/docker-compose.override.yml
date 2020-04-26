@@ -5,6 +5,14 @@ networks:
     internal:
         external: false
 services: 
+    airflow:
+        labels:
+            - "traefik.http.routers.airflow.rule=Host(`airflow.${DOMAIN}`)"
+            - "traefik.http.services.airflow.loadbalancer.server.port=8080"
+    flower:
+        labels:
+            - "traefik.http.routers.flower.rule=Host(`flower.${DOMAIN}`)"
+            - "traefik.http.services.flower.loadbalancer.server.port=5555"
     minio:
         labels:
             - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"

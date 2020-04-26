@@ -7,5 +7,7 @@
     "pgadmin_password": "changethis",
 
     "minio_access_key": "changethis",
-    "minio_secret_key": "changethis"
+    "minio_secret_key": "changethis",
+
+    "rabbitmq_password": "changethis"
 }

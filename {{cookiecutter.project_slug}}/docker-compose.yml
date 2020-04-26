@@ -5,6 +5,48 @@ networks:
     internal:
         external: false
 services: 
+    airflow:
+        build:
+            context: airflow
+            dockerfile: dockerfile
+        command: /scripts/webserver-entrypoint.sh
+        deploy:
+            labels:
+                - "traefik.http.routers.airflow.rule=Host(`airflow.${DOMAIN}`)"
+                - "traefik.http.services.airflow.loadbalancer.server.port=8080"
+        env_file: .env
+        image: airflow
+        networks: 
+            - internal
+        volumes: 
+            - ./airflow/scripts/:/scripts
+            - ./airflow/dags/:/root/dags/
+    airflow_scheduler:
+        build:
+            context: airflow
+            dockerfile: dockerfile
+        command: /scripts/scheduler-entrypoint.sh
+        env_file: .env
+        image: airflow
+        networks: 
+            - internal
+        restart: always
+        volumes: 
+            - ./airflow/scripts/:/scripts
+            - ./airflow/dags/:/root/dags/
+    airflow_worker:
+        build:
+            context: airflow
+            dockerfile: dockerfile
+        command: /scripts/worker-entrypoint.sh
+        env_file: .env
+        image: airflow
+        networks: 
+            - internal
+        restart: always
+        volumes: 
+            - ./airflow/scripts/:/scripts
+            - ./airflow/dags/:/root/dags/
     db:
         env_file: .env
         image: postgres:12
@@ -12,6 +54,25 @@ services:
             - internal
         volumes: 
             - ./postgres/:/docker-entrypoint-initdb.d/:ro
+    flower:
+        build: 
+            context: flower
+            dockerfile: dockerfile
+        command: >
+            flower 
+            --broker=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq/${RABBITMQ_DEFAULT_VHOST}
+            --port=5555
+        deploy:
+            labels:
+                - "traefik.http.routers.flower.rule=Host(`flower.${DOMAIN}`)"
+                - "traefik.http.services.flower.loadbalancer.server.port=5555"
+        env_file: .env
+        image: flower
+        networks:
+            - internal
+        restart: always
+        ports:
+            - 5555:5555
     minio:
         command: server /data
         deploy:
@@ -58,3 +119,8 @@ services:
         networks: 
             - internal
             - traefik-public
+    rabbitmq:
+        env_file: .env
+        image: rabbitmq
+        networks: 
+            - internal
